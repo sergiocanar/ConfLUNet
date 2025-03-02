@@ -98,8 +98,6 @@ def preprocess(dataset_id: int,
     # Because the data should already be in the correct format, we can retrieve the dataset.json file provided by the
     # user and verify the dataset integrity.
     dataset_name = convert_id_to_dataset_name(dataset_id)
-    print(dataset_name)
-
     if check_dataset_integrity and not inference:
         verify_dataset_integrity(join(nnUNet_raw, dataset_name), num_processes)
 

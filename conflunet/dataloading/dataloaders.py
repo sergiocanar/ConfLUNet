@@ -13,7 +13,7 @@ from conflunet.dataloading.utils import get_train_transforms, get_val_transforms
 def get_train_dataloader(folder: str,
                          case_identifiers: Union[List[str], None] = None,
                          patch_size: Union[tuple, None] = (96, 96, 96),
-                         batch_size=2,
+                         batch_size=1,
                          remove_small_instances=False,
                          voxel_size=(1, 1, 1),
                          minimum_instance_size=14,
@@ -39,7 +39,7 @@ def get_train_dataloader(folder: str,
 def get_val_dataloader(folder: str,
                        case_identifiers: Union[List[str], None] = None,
                        patch_size: Union[tuple, None] = (96, 96, 96),
-                       batch_size=2,
+                       batch_size=1,
                        remove_small_instances=False,
                        voxel_size=(1, 1, 1),
                        minimum_instance_size=14,
@@ -47,7 +47,7 @@ def get_val_dataloader(folder: str,
                        num_workers=0,
                        cache_rate=1.0,
                        seed_val=1) -> monai.data.DataLoader:
-    val_transforms = get_train_transforms(seed=seed_val, patch_size=patch_size,
+    val_transforms = get_val_transforms(seed=seed_val, patch_size=patch_size,
                                           remove_small_instances=remove_small_instances,
                                           voxel_size=voxel_size,
                                           minimum_instance_size=minimum_instance_size,
@@ -90,6 +90,7 @@ def _get_val_train_keys(preprocessed_dataset_folder: str, fold: int = None) -> T
             )
             # TODO: handle case where splits_final.json does not exist
         splits_final = load_json(splits_final)
+        fold = str(fold)
         tr_keys = splits_final[fold]['train']
         val_keys = splits_final[fold]['val']
 
@@ -109,7 +110,9 @@ def get_train_dataloader_from_dataset_id_and_fold(
     preprocessed_dataset_folder = join(nnUNet_preprocessed, dataset_name)
     preprocessed_data_folder = join(preprocessed_dataset_folder, configuration.configuration['data_identifier'])
 
-    tr_keys, val_keys = _get_val_train_keys(preprocessed_dataset_folder, fold)
+    tr_keys, _ = _get_val_train_keys(preprocessed_dataset_folder, fold)
+    
+    
 
     patch_size = configuration.patch_size
     batch_size = configuration.batch_size
@@ -131,7 +134,7 @@ def get_val_dataloader_from_dataset_id_and_fold(
     preprocessed_dataset_folder = join(nnUNet_preprocessed, dataset_name)
     preprocessed_data_folder = join(preprocessed_dataset_folder, configuration.configuration['data_identifier'])
 
-    tr_keys, val_keys = _get_val_train_keys(preprocessed_dataset_folder, fold)
+    _, val_keys = _get_val_train_keys(preprocessed_dataset_folder, fold)
 
     patch_size = configuration.patch_size
     batch_size = configuration.batch_size
@@ -151,7 +154,7 @@ def get_full_val_dataloader_from_dataset_id_and_fold(
     preprocessed_dataset_folder = join(nnUNet_preprocessed, dataset_name)
     preprocessed_data_folder = join(preprocessed_dataset_folder, configuration.configuration['data_identifier'])
 
-    tr_keys, val_keys = _get_val_train_keys(preprocessed_dataset_folder, fold)
+    _, val_keys = _get_val_train_keys(preprocessed_dataset_folder, fold)
 
     return get_test_dataloader(preprocessed_data_folder, case_identifiers=val_keys, batch_size=1,
                                num_workers=num_workers, test=False, voxel_size=configuration.spacing,

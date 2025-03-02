@@ -16,6 +16,7 @@ import shutil
 from time import sleep
 from typing import Tuple, Union
 from wave import Error
+from os.path import isdir
 
 from conflunet.preprocessing.utils import crop_to_nonzero, create_center_heatmap_from_instance_seg, \
     get_confluent_instances_classes, get_small_object_classes, merge_maps
@@ -66,8 +67,8 @@ class InstanceSegProcessor(DefaultPreprocessor):
         if self.inference:
             assert self.output_dir_for_inference is not None, "If inference is True, output_dir_for_inference must be " \
                                                               "specified. Got None."
-            assert isdir(self.output_dir_for_inference), "output_dir_for_inference must be a directory. Got %s" % \
-                                                            self.output_dir_for_inference
+            #assert isdir(self.output_dir_for_inference), "output_dir_for_inference must be a directory. Got %s" % \
+                                                            #self.output_dir_for_inference
 
     @staticmethod
     def modify_instance_seg_fn(instance_seg: np.ndarray) -> np.ndarray:
