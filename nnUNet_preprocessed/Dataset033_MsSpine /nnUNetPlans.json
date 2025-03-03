@@ -26,7 +26,7 @@
         "2d": {
             "data_identifier": "nnUNetPlans_2d",
             "preprocessor_name": "DefaultPreprocessor",
-            "batch_size": 315,
+            "batch_size": 362,
             "patch_size": [
                 96,
                 96
@@ -160,7 +160,7 @@
         "3d_fullres": {
             "data_identifier": "nnUNetPlans_3d_fullres",
             "preprocessor_name": "DefaultPreprocessor",
-            "batch_size": 3,
+            "batch_size": 4,
             "patch_size": [
                 96,
                 96,
@@ -309,13 +309,13 @@
     "label_manager": "LabelManager",
     "foreground_intensity_properties_per_channel": {
         "0": {
-            "max": 2015.872802734375,
-            "mean": 148.28088222879077,
-            "median": 106.92247772216797,
+            "max": 2111.644287109375,
+            "mean": 165.6545087934566,
+            "median": 117.41012573242188,
             "min": 4.385012626647949,
-            "percentile_00_5": 28.32545280456543,
-            "percentile_99_5": 731.7960205078125,
-            "std": 125.73865090173604
+            "percentile_00_5": 29.64170265197754,
+            "percentile_99_5": 840.7626342773438,
+            "std": 141.45000738071832
         }
     }
 }
