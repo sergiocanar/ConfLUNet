@@ -13,6 +13,7 @@ from monai.transforms import (
     RandAffined,
     RandSpatialCropd,
     RandCropByPosNegLabeld,
+    ResizeWithPadOrCropd,
 )
 
 from conflunet.dataloading.transforms.data_augmentations.scaleintensityfixedmean import RandScaleIntensityFixedMeand
@@ -127,6 +128,7 @@ def get_train_transforms(seed: Union[int, None] = None,
         FgBgToIndicesd(keys=['seg']),
         # # Crop random fixed sized regions with the center being a foreground or background voxel
         # # based on the Pos Neg Ratio.
+        ResizeWithPadOrCropd(keys=['img', 'seg', 'instance_seg', 'offsets', 'center_heatmap', 'brainmask'] + additional_keys, allow_missing_keys=True,spatial_size=(96, 96, 96)),
         RandCropByPosNegLabeld(keys=['img', 'seg', 'instance_seg', 'brainmask'] + additional_keys,
                                label_key="seg",
                                fg_indices_key="seg_fg_indices",
@@ -141,12 +143,12 @@ def get_train_transforms(seed: Union[int, None] = None,
         *get_nnunet_augmentations(image_key="img", seg_keys=["seg", "instance_seg", 'brainmask'] + additional_keys),
         LesionOffsetTransformd(keys="instance_seg"),
         ToTensord(keys=['img', 'seg', 'offsets', 'center_heatmap', 'brainmask'] + additional_keys),
-        DeleteKeysd(keys=['properties']),
+        DeleteKeysd(keys=['properties'])
     ]
     if remove_small_instances:
         transform_list.insert(1, RemoveSmallInstancesTransform(
             keys=["instance_seg", "seg"], instance_seg_key="instance_seg", voxel_size=voxel_size,
-            minimum_instance_size=minimum_instance_size, minimum_size_along_axis=minimum_size_along_axis)
+            minimum_instance_size=minimum_instance_size, minimum_size_along_axis=minimum_size_along_axis),
                               )
     transform = Compose(transform_list)
 
@@ -168,6 +170,7 @@ def get_val_transforms(seed: Union[int, None] = None,
         FgBgToIndicesd(keys=['seg']),
         # Crop random fixed sized regions with the center being a foreground or background voxel
         # based on the Pos Neg Ratio.
+        ResizeWithPadOrCropd(keys=['img', 'seg', 'instance_seg', 'offsets', 'center_heatmap', 'brainmask'], allow_missing_keys=True,spatial_size=(96, 96, 96)),
         RandCropByPosNegLabeld(keys=['img', 'seg', 'instance_seg', 'brainmask'],
                                label_key="seg",
                                fg_indices_key="seg_fg_indices",
@@ -176,12 +179,12 @@ def get_val_transforms(seed: Union[int, None] = None,
                                pos=1, neg=1, allow_smaller=True),
         LesionOffsetTransformd(keys="instance_seg"),
         ToTensord(keys=['img', 'seg', 'offsets', 'center_heatmap', 'brainmask']),
-        DeleteKeysd(keys=['properties']),
+        DeleteKeysd(keys=['properties'])  
     ]
     if remove_small_instances:
         transform_list.insert(1, RemoveSmallInstancesTransform(
             keys=["instance_seg", "seg"], instance_seg_key="instance_seg", voxel_size=voxel_size,
-            minimum_instance_size=minimum_instance_size, minimum_size_along_axis=minimum_size_along_axis)
+            minimum_instance_size=minimum_instance_size, minimum_size_along_axis=minimum_size_along_axis),
                               )
     transform = Compose(transform_list)
 
@@ -196,11 +199,12 @@ def get_test_transforms(test: bool = True, voxel_size: Tuple = (1, 1, 1),
         CustomLoadNPZInstanced(keys=['data'], test=test),
         ToTensord(keys=['img', 'brainmask'], allow_missing_keys=True),
         DeleteKeysd(keys=['properties']),
+        ResizeWithPadOrCropd(keys=['img', 'brainmask'], spatial_size=(96, 96, 96))
     ]
     if not test:
         transform_list.insert(1, RemoveSmallInstancesTransform(
             keys=["instance_seg", "seg"], instance_seg_key="instance_seg", voxel_size=voxel_size,
-            minimum_instance_size=minimum_instance_size, minimum_size_along_axis=minimum_size_along_axis
+            minimum_instance_size=minimum_instance_size, minimum_size_along_axis=minimum_size_along_axis,
         ))
     transform = Compose(transform_list)
     return transform

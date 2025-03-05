@@ -67,8 +67,8 @@ class InstanceSegProcessor(DefaultPreprocessor):
         if self.inference:
             assert self.output_dir_for_inference is not None, "If inference is True, output_dir_for_inference must be " \
                                                               "specified. Got None."
-            #assert isdir(self.output_dir_for_inference), "output_dir_for_inference must be a directory. Got %s" % \
-                                                            #self.output_dir_for_inference
+            assert isdir(self.output_dir_for_inference), "output_dir_for_inference must be a directory. Got %s" % \
+                                                            self.output_dir_for_inference
 
     @staticmethod
     def modify_instance_seg_fn(instance_seg: np.ndarray) -> np.ndarray:

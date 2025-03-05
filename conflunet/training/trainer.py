@@ -6,6 +6,8 @@ from os.path import join as pjoin
 from typing import Callable, Dict, Union
 
 from monai.data import DataLoader
+from skimage.transform import resize
+from monai.transforms import Resize
 from nnunetv2.paths import  nnUNet_results
 from nnunetv2.training.lr_scheduler.polylr import PolyLRScheduler
 
@@ -21,6 +23,7 @@ from conflunet.dataloading.dataloaders import (
     get_val_dataloader_from_dataset_id_and_fold,
     get_full_val_dataloader_from_dataset_id_and_fold)
 from conflunet.training.utils import get_default_device, seed_everything
+
 
 warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
 
@@ -342,8 +345,9 @@ class TrainingPipeline:
         semantic_pred_binary = np.squeeze(pred['semantic_pred_binary'].detach().cpu().numpy())
         gt_instance_seg = remove_small_lesions(np.squeeze(gt['instance_seg'].detach().cpu().numpy()),
                                                self.configuration.spacing)
+        gt_instance_seg = resize(gt_instance_seg, (96, 96, 96), mode='constant', preserve_range=True)
         gt_semantic = (gt_instance_seg > 0).astype(np.int16)
-        
+                                        
         for metric_name, (metric_fn, semantic) in self.metrics_to_track.items():
             if semantic:
                 avg_val_metrics[metric_name] += metric_fn(semantic_pred_binary, gt_semantic)

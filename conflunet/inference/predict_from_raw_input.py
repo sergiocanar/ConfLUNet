@@ -45,12 +45,14 @@ def predict_from_raw_input_and_model_name(
         postprocessor_class = ACLSPostprocessor if postprocessor == 'ACLS' else ConnectedComponentsPostprocessor
 
     predictor_class = ConfLUNetPredictor if not semantic else SemanticPredictor
-    model = [pjoin(base_dir, f"fold_{i}", checkpoint_name) for i in range(5)]
+    model = pjoin(base_dir, f'fold_0', checkpoint_name)
+    # model = [pjoin(base_dir, f"fold_{i}", checkpoint_name) for i in range(5)]
     if not pexists(model[0]):
         raise FileNotFoundError(f"Model checkpoint not found at {model[0]}")
 
     if postprocessor_kwargs is None:
         postprocessor_kwargs = {}
+        
 
     predictor = predictor_class(
         plans_manager=plans_manager,
