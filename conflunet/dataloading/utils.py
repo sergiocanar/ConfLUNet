@@ -199,7 +199,7 @@ def get_test_transforms(test: bool = True, voxel_size: Tuple = (1, 1, 1),
         CustomLoadNPZInstanced(keys=['data'], test=test),
         ToTensord(keys=['img', 'brainmask'], allow_missing_keys=True),
         DeleteKeysd(keys=['properties']),
-        ResizeWithPadOrCropd(keys=['img', 'brainmask'], spatial_size=(96, 96, 96))
+        ResizeWithPadOrCropd(keys=['img', 'brainmask'], spatial_size=(96, 96, 96), allow_missing_keys=True)
     ]
     if not test:
         transform_list.insert(1, RemoveSmallInstancesTransform(

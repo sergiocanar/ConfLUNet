@@ -171,6 +171,13 @@ class Predictor:
                 should_i_squeeze = False
                 should_i_unsqueeze = False
                 if len(this_output.shape) == 3:
+                    # Check if this_output is already a tensor
+                    if isinstance(this_output, torch.Tensor):
+                        # Skip conversion or convert to NumPy array if needed
+                        this_output = this_output
+                    else:
+                        # Convert to tensor if it's a NumPy array
+                        this_output = torch.from_numpy(this_output)
                     this_output = torch.unsqueeze(this_output, 0)
                     should_i_squeeze = True
                 elif len(this_output.shape) == 5:
@@ -195,10 +202,20 @@ class Predictor:
                 # Finally, we revert the transpose operation
                 this_output_reverted_cropping = this_output_reverted_cropping.transpose(self.plans_manager.transpose_backward)
                 # maybe convert to torch tensor
+                
+
+                
                 if isinstance(output[key], torch.Tensor) and not isinstance(this_output_reverted_cropping, torch.Tensor):
                     # As the output is likely to be way larger than the input, we put it back on the cpu to avoid
                     # any GPU memory issues
                     this_output_reverted_cropping = torch.from_numpy(this_output_reverted_cropping).to('cpu')
+
+                if isinstance(this_output_reverted_cropping, torch.Tensor):
+                    # Skip conversion or convert to NumPy array if needed
+                    this_output_reverted_cropping = this_output_reverted_cropping
+                else:
+                        # Convert to tensor if it's a NumPy array
+                    this_output_reverted_cropping = torch.from_numpy(this_output_reverted_cropping)
 
                 # If we squeezed/unsqueezed the tensor at the beginning, we need to unsqueeze/squeeze it back to the
                 # original shape
