@@ -7,9 +7,9 @@
         1.0
     ],
     "original_median_shape_after_transp": [
-        121,
-        127,
-        122
+        91,
+        95,
+        92
     ],
     "image_reader_writer": "SimpleITKIO",
     "transpose_forward": [
@@ -26,14 +26,14 @@
         "2d": {
             "data_identifier": "nnUNetPlans_2d",
             "preprocessor_name": "DefaultPreprocessor",
-            "batch_size": 199,
+            "batch_size": 362,
             "patch_size": [
-                128,
-                128
+                96,
+                96
             ],
             "median_image_size_in_voxels": [
-                127.0,
-                122.0
+                95.0,
+                92.0
             ],
             "spacing": [
                 1.0,
@@ -69,21 +69,16 @@
             "architecture": {
                 "network_class_name": "dynamic_network_architectures.architectures.unet.PlainConvUNet",
                 "arch_kwargs": {
-                    "n_stages": 6,
+                    "n_stages": 5,
                     "features_per_stage": [
                         32,
                         64,
                         128,
                         256,
-                        512,
                         512
                     ],
                     "conv_op": "torch.nn.modules.conv.Conv2d",
                     "kernel_sizes": [
-                        [
-                            3,
-                            3
-                        ],
                         [
                             3,
                             3
@@ -125,10 +120,6 @@
                         [
                             2,
                             2
-                        ],
-                        [
-                            2,
-                            2
                         ]
                     ],
                     "n_conv_per_stage": [
@@ -136,11 +127,9 @@
                         2,
                         2,
                         2,
-                        2,
                         2
                     ],
                     "n_conv_per_stage_decoder": [
-                        2,
                         2,
                         2,
                         2,
@@ -171,16 +160,16 @@
         "3d_fullres": {
             "data_identifier": "nnUNetPlans_3d_fullres",
             "preprocessor_name": "DefaultPreprocessor",
-            "batch_size": 2,
+            "batch_size": 4,
             "patch_size": [
-                128,
-                128,
-                128
+                96,
+                96,
+                96
             ],
             "median_image_size_in_voxels": [
-                121.0,
-                127.0,
-                122.0
+                91.0,
+                95.0,
+                92.0
             ],
             "spacing": [
                 1.0,
@@ -217,22 +206,16 @@
             "architecture": {
                 "network_class_name": "dynamic_network_architectures.architectures.unet.PlainConvUNet",
                 "arch_kwargs": {
-                    "n_stages": 6,
+                    "n_stages": 5,
                     "features_per_stage": [
                         32,
                         64,
                         128,
                         256,
-                        320,
                         320
                     ],
                     "conv_op": "torch.nn.modules.conv.Conv3d",
                     "kernel_sizes": [
-                        [
-                            3,
-                            3,
-                            3
-                        ],
                         [
                             3,
                             3,
@@ -284,11 +267,6 @@
                             2,
                             2,
                             2
-                        ],
-                        [
-                            2,
-                            2,
-                            2
                         ]
                     ],
                     "n_conv_per_stage": [
@@ -296,11 +274,9 @@
                         2,
                         2,
                         2,
-                        2,
                         2
                     ],
                     "n_conv_per_stage_decoder": [
-                        2,
                         2,
                         2,
                         2,
@@ -333,13 +309,13 @@
     "label_manager": "LabelManager",
     "foreground_intensity_properties_per_channel": {
         "0": {
-            "max": 2200.893798828125,
-            "mean": 148.12487409314423,
-            "median": 106.79875183105469,
-            "min": 3.9074912071228027,
-            "percentile_00_5": 29.955808639526367,
-            "percentile_99_5": 743.7603149414062,
-            "std": 125.92539474241606
+            "max": 1597.795654296875,
+            "mean": 159.8568022006641,
+            "median": 116.83731842041016,
+            "min": 0.06004014238715172,
+            "percentile_00_5": 33.02968978881836,
+            "percentile_99_5": 846.8035888671875,
+            "std": 129.05037056356483
         }
     }
 }

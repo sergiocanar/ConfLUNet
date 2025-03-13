@@ -90,8 +90,9 @@ def _get_val_train_keys(preprocessed_dataset_folder: str, fold: int = None) -> T
             )
             # TODO: handle case where splits_final.json does not exist
         splits_final = load_json(splits_final)
-        tr_keys = splits_final[fold]['train']
-        val_keys = splits_final[fold]['val']
+        
+        tr_keys = splits_final[str(fold)]['train']
+        val_keys = splits_final[str(fold)]['val']
 
     return tr_keys, val_keys
 
