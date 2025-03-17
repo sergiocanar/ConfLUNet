@@ -38,6 +38,8 @@ def predict_from_raw_input_and_model_name(
     if not semantic and postprocessor == 'ConfLUNet':
         checkpoint_name = "checkpoint_best_Panoptic_Quality_ConfLUNet.pth"
     else:
+        # checkpoint_name = f"checkpoint_best_Dice_Score_{postprocessor}.pth"
+        postprocessor = 'CC'
         checkpoint_name = f"checkpoint_best_Dice_Score_{postprocessor}.pth"
 
     postprocessor_class = ConfLUNetPostprocessor if not semantic else None
@@ -46,6 +48,7 @@ def predict_from_raw_input_and_model_name(
 
     predictor_class = ConfLUNetPredictor if not semantic else SemanticPredictor
     model = [pjoin(base_dir, f"fold_{i}", checkpoint_name) for i in range(5)]
+    model = model[0]
     if not pexists(model[0]):
         raise FileNotFoundError(f"Model checkpoint not found at {model[0]}")
 

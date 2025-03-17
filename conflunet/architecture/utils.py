@@ -18,7 +18,7 @@ def get_model(configuration: ConfigurationManagerInstanceSeg, n_channels: int, s
 
 def load_model(configuration: ConfigurationManagerInstanceSeg, checkpoint: str, n_channels: int, semantic: bool = False):
     model = get_model(configuration, n_channels, semantic)
-    checkpoint = torch.load(checkpoint)
+    checkpoint = torch.load(checkpoint, weights_only=False)
     model.load_state_dict(checkpoint['state_dict'])
     return model
 
