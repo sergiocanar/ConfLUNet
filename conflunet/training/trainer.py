@@ -168,7 +168,7 @@ class TrainingPipeline:
         self.scaler = torch.cuda.amp.GradScaler()
 
         if os.path.exists(self.checkpoint_filename) and not self.force_restart:
-            checkpoint = torch.load(self.checkpoint_filename)
+            checkpoint = torch.load(self.checkpoint_filename, weights_only=False)
             self.start_epoch = checkpoint['epoch']
             self.model.load_state_dict(checkpoint['state_dict'])
             self.optimizer.load_state_dict(checkpoint['optimizer'])
